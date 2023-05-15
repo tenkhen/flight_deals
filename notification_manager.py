@@ -7,8 +7,9 @@ tw_auth_token = os.environ.get('tw_auth_token')
 sender_num = os.environ.get('sender_num')
 dest_num = os.environ.get('dest_num')
 
-SENDER_EMAIL = 'day.32.tk@gmail.com'
-GMAIL_APP_PW = 'wzgfqteeofpntvwp'
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL')
+GMAIL_APP_PW = os.environ.get('GMAIL_APP_PW')
+
 MAIL_PROVIDER_SMTP_ADDRESS = 'smtp.gmail.com'
 
 class NotificationManager:
