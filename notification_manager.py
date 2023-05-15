@@ -1,4 +1,5 @@
 import os
+import smtplib
 from twilio.rest import Client
 
 tw_sid = os.environ.get('tw_sid')
@@ -6,24 +7,30 @@ tw_auth_token = os.environ.get('tw_auth_token')
 sender_num = os.environ.get('sender_num')
 dest_num = os.environ.get('dest_num')
 
+SENDER_EMAIL = 'day.32.tk@gmail.com'
+GMAIL_APP_PW = 'wzgfqteeofpntvwp'
+MAIL_PROVIDER_SMTP_ADDRESS = 'smtp.gmail.com'
+
 class NotificationManager:
-    def __init__(self, price, dep_city, dep_code, arr_city, arr_code, out_date, in_date):
-        self.price = price
-        self.dep_city = dep_city
-        self.dep_code = dep_code
-        self.arr_city = arr_city
-        self.arr_code = arr_code
-        self.out_date = out_date
-        self.in_date = in_date
 
-    def send_email(self):
-        client = Client(tw_sid, tw_auth_token)
+    def __init__(self):
+        self.client = Client(tw_sid, tw_auth_token)
 
-        message = client.messages \
-            .create(
-            body=f"Low price alert! Only ￡{self.price} to fly from {self.dep_city}-{self.dep_code} to {self.arr_city}-{self.arr_code}, from {self.out_date} to {self.in_date}",
+    def send_sms(self, message):
+        message = self.client.messages.create(
+            body=message,
             from_=sender_num,
-            to=dest_num
+            to=dest_num,
         )
+        print(message.sid)
 
-        print(message.status)
+    def send_emails(self, emails, message):
+        with smtplib.SMTP(MAIL_PROVIDER_SMTP_ADDRESS) as connection:
+            connection.starttls()
+            connection.login(SENDER_EMAIL, GMAIL_APP_PW)
+            for email in emails:
+                connection.sendmail(
+                    from_addr=SENDER_EMAIL,
+                    to_addrs=email,
+                    msg=f"Subject:New Low Price Flight!\n\n{message}".encode('utf-8')
+                )
