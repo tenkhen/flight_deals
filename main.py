@@ -32,8 +32,8 @@ for destination_code in destinations:
     flight = flight_search.check_flights(
         ORIGIN_CITY_IATA,
         destination_code,
-        from_time=tomorrow,
-        to_time=six_month_from_today
+        from_time=tomorrow.strftime('%d/%m/%Y'),
+        to_time=six_month_from_today.strftime('%d/%m/%Y')
     )
 
     if flight is None:

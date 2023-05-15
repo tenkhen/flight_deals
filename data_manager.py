@@ -46,7 +46,7 @@ class DataManager:
 
     def get_customer_emails(self):
         customers_endpoint = SHEETY_USERS_ENDPOINT
-        response = requests.get(url=customers_endpoint)
+        response = requests.get(url=customers_endpoint, headers=header)
         data = response.json()
         self.customer_data = data["users"]
         return self.customer_data
